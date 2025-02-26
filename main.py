@@ -1,17 +1,32 @@
 import random
 import string
+from typing import Optional
 
-# generate a random length sized sequence of characters based in a list of valid_chars
-def generate_password(length, valid_chars_list):
-    password = ''.join(random.choices(valid_chars_list, k=length))
-    return password
+VALID_CHARS = string.digits + string.ascii_letters + string.punctuation
 
-#Execute code when called from terminal
+def generate_password(
+    length: Optional[int] = 16,
+    letters: Optional[int] = None,
+    digits: Optional[int] = None,
+    punctuation: Optional[int] = None,
+):
+    password = []
+    if letters:
+        password.extend(random.choices(string.ascii_letters, k=letters or length))
+    if digits:
+        password.extend(random.choices(string.digits, k=digits or length))
+    if punctuation:
+        password.extend(random.choices(string.punctuation, k=punctuation or length))
+
+    random.shuffle(password)
+
+    return "".join(password)
+
+
 if __name__ == "__main__":
-    
-    # List of valid characters to be used as possible values when generating a password
-    valid_chars = string.digits + string.ascii_letters + string.punctuation
-    # Call for function to generate password
-    generated_password = generate_password(16, valid_chars)
-    # Print the result from generate_password function
-    print(f'Generated password: ', generated_password)
+    generated_password = generate_password(
+        letters=6,
+        digits=3,
+        punctuation=1,
+    )
+    print(f"Generated password: ", generated_password)
